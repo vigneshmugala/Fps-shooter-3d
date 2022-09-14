@@ -12,11 +12,18 @@ public class MenuController : MonoBehaviour
     public Slider volumeSlider;
     public TMP_Text volumeText;
     public float defaultVolume = 0.65f;
+
+    [Header("Gameplay Settings")]
+
+    public Slider sensitivitySlider;
+    public Toggle invertYToggle;
+    public int defaultSensitivity = 4;
+    public int mainSensitivity;
+    public TMP_Text sensitivityText;
+
+
+    [Header("Confirmation Box")]
     public GameObject confirmationTick;
-
-
-
-
 
     [Header ("Levels to Load")]
     
@@ -75,7 +82,39 @@ public class MenuController : MonoBehaviour
             PlayerPrefs.SetFloat("masterVolume", defaultVolume);
             volumeSlider.value = defaultVolume;
             volumeText.text = defaultVolume.ToString("0.0");
+
         }
+
+        if(menuType == "Gameplay")
+        {
+            sensitivityText.text = defaultSensitivity.ToString("0");
+            sensitivitySlider.value = defaultSensitivity;
+            invertYToggle.isOn = false;
+            mainSensitivity = defaultSensitivity;
+            GameplayApply();
+
+        }
+    }
+
+    public void SetSensitivity(float sensitivity)
+    {
+        mainSensitivity = Mathf.RoundToInt(sensitivity);
+        sensitivityText.text = mainSensitivity.ToString("0");
+
+    }
+
+    public void GameplayApply()
+    {
+        if(invertYToggle.isOn)
+        {
+            PlayerPrefs.SetInt("masterInvertY", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("masterInvertY", 0);
+        }
+        PlayerPrefs.SetFloat("masterSensitivity", mainSensitivity);
+        StartCoroutine(ConfirmationBox());
     }
 
 
