@@ -82,6 +82,7 @@ public class MenuController : MonoBehaviour
             PlayerPrefs.SetFloat("masterVolume", defaultVolume);
             volumeSlider.value = defaultVolume;
             volumeText.text = defaultVolume.ToString("0.0");
+            StartCoroutine(ConfirmationBox());
 
         }
 
