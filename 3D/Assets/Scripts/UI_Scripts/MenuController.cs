@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Unity.VisualScripting;
 
 public class MenuController : MonoBehaviour
 {
@@ -21,16 +22,62 @@ public class MenuController : MonoBehaviour
     public int mainSensitivity;
     public TMP_Text sensitivityText;
 
+    [Header("Graphics Settings")]
+
+    public Slider brightnessSlider;
+    public Toggle FullscreenToggle;
+    public TMP_Dropdown qualityDropdown;
+    public TMP_Text brightnessText;
+
+    private int qualityLevel;
+    private bool isFullScreen;
+    private float brightnessLevel;
+
+    [Header("Resolution Settings")]
+
+    public TMP_Dropdown resolutionDropdown;
+    private Resolution[] resolutions;
+
 
     [Header("Confirmation Box")]
     public GameObject confirmationTick;
 
     [Header ("Levels to Load")]
     
-
     public string newLeveltoLoad;
     public string levelToLoad;
     public GameObject noSavedGameUI;
+
+    public void Start()
+    {
+        resolutions = Screen.resolutions;
+        int currentRes;
+        resolutionDropdown.ClearOptions();
+
+        List<string> options = new List<string>();
+        for(int i=0; i<resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + "x" + resolutions[i].height;
+            options.Add(option);
+
+            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+            {
+                currentRes = i;
+            }
+
+        }
+    }
+
+    public void SetResolution(int resolutionIndex)
+    {
+        Resolution res = resolutions[resolutionIndex];
+        Screen.SetResolution(res.width, res.height, Screen.fullScreen);
+
+    }
+
+
+
+
     public void NewGameOnYes()
     {
         SceneManager.LoadScene(levelToLoad);
@@ -103,6 +150,38 @@ public class MenuController : MonoBehaviour
         sensitivityText.text = mainSensitivity.ToString("0");
 
     }
+
+
+    public void SetBrightness(float brightness)
+    {
+        brightnessLevel = brightness;
+        brightnessText.text = brightnessLevel.ToString("0.0");
+    }
+
+
+    public void SetQualityLevel(int qualityIndex)
+    {
+        qualityLevel = qualityIndex;
+    }
+
+    public void SetFullScreen(bool isFull)
+    {
+        isFullScreen = isFull;
+    }
+
+    public void GraphicsApply()
+    {
+        PlayerPrefs.SetFloat("masterBrightness", brightnessLevel);
+
+        PlayerPrefs.SetInt("masterQualityLevel", qualityLevel);
+        QualitySettings.SetQualityLevel(qualityLevel);
+
+        PlayerPrefs.SetInt("masterFullScreen", (isFullScreen ? 1 : 0));
+        Screen.fullScreen = isFullScreen;
+
+        StartCoroutine(ConfirmationBox());
+    }
+
 
     public void GameplayApply()
     {
