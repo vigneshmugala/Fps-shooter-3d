@@ -33,6 +33,8 @@ public class MenuController : MonoBehaviour
     private bool isFullScreen;
     private float brightnessLevel;
 
+    private float defaultBrightnessLevel = 5.7f;
+
     [Header("Resolution Settings")]
 
     public TMP_Dropdown resolutionDropdown;
@@ -66,6 +68,7 @@ public class MenuController : MonoBehaviour
             }
 
         }
+        resolutionDropdown.AddOptions(options);
     }
 
     public void SetResolution(int resolutionIndex)
@@ -74,8 +77,6 @@ public class MenuController : MonoBehaviour
         Screen.SetResolution(res.width, res.height, Screen.fullScreen);
 
     }
-
-
 
 
     public void NewGameOnYes()
@@ -140,7 +141,24 @@ public class MenuController : MonoBehaviour
             invertYToggle.isOn = false;
             mainSensitivity = defaultSensitivity;
             GameplayApply();
+        }
 
+        if(menuType == "Graphics")
+        {
+            brightnessSlider.value = defaultBrightnessLevel;
+            brightnessText.text = defaultBrightnessLevel.ToString("0.0");
+
+            FullscreenToggle.isOn = true;
+            Screen.fullScreen = true;
+
+            qualityDropdown.value = 1;
+            QualitySettings.SetQualityLevel(1);
+
+            Resolution currRes = Screen.currentResolution;
+            Screen.SetResolution(currRes.width, currRes.height, Screen.fullScreen);
+            resolutionDropdown.value = resolutions.Length;
+
+            GraphicsApply();
         }
     }
 
