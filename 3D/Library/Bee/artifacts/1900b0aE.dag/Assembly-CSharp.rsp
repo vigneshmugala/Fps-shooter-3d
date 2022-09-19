@@ -367,6 +367,7 @@
 "Assets/Scripts/MouseLook.cs"
 "Assets/Scripts/PlayerMovement.cs"
 "Assets/Scripts/Target.cs"
+"Assets/Scripts/UI_Scripts/LoadPrefs.cs"
 "Assets/Scripts/UI_Scripts/MenuController.cs"
 "Assets/Scripts/WeaponSwitch.cs"
 -langversion:9.0
