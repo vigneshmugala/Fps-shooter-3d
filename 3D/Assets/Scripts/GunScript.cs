@@ -11,6 +11,8 @@ public class GunScript : MonoBehaviour
     public float damage = 10f;
     public GameObject gunFlare;
     public ParticleSystem muzzleFlash;
+    //public GameObject muzzFlash;
+    public Transform gunTip;
     public Animator anim;
     public TextMeshProUGUI reloadText;
     public float force = 35f;
@@ -31,6 +33,9 @@ public class GunScript : MonoBehaviour
     void OnEnable()
     {
         isReloading = false;
+        currentAmmo = maxAmmo;
+        if (reloadText.IsActive())
+            reloadText.gameObject.SetActive(false);
         anim.SetBool("Reloading", false);
     }
 
@@ -81,9 +86,11 @@ public class GunScript : MonoBehaviour
 
     void Shoot()
     {
+        //muzzleFlash.Play();
+        //ParticleSystem flash = Instantiate(muzzleFlash, gunTip);
         muzzleFlash.Play();
-
         currentAmmo--;
+        //Destroy(flash);
         RaycastHit hit;
         if(Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
